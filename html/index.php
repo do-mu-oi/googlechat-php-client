@@ -1,5 +1,6 @@
 <?php
-define("WEBHOOK_URL_FORMAT", "https://chat.googleapis.com/v1/spaces/%s/messages?key=%s&token=%s");
+$webhook_url = $_GET["url"];
+$message = $_GET["message"];
 
 function post($url, $params) {
     $curl = curl_init();
@@ -29,42 +30,40 @@ function post($url, $params) {
 <body>
     <h1>Google Chat PHP Client</h1>
 <?php
-if (isset($_GET["room"]) && isset($_GET["key"]) && isset($_GET["token"])) {
-    $url = sprintf(
-        WEBHOOK_URL_FORMAT,
-        urlencode($_GET["room"]),
-        urlencode($_GET["key"]),
-        urlencode($_GET["token"]),
-    );
-
-    $message = $_GET["message"];
-
-    $res = post($url, [
+if ($webhook_url && $message) {
+    $res = post($webhook_url, [
         "text" => $message
     ]);
 
     if ($res->error) {
         $title = "[ERROR] Message sending error.";
-        $res_message = $res->error->message;
+        $class_name = "error";
     } else {
         $title = "[OK] Message transmission completed.";
-        $res_message = $res->name;
+        $class_name = "success";
     }
 ?>
-    <h2><?= $title ?></h2>
+    <h2 class="<?= $class_name ?>"><?= $title ?></h2>
     <dl>
         <dt>Webhook URL</dt>
-        <dd><code><?= $url ?></code></dd>
+        <dd><code><?= $webhook_url ?></code></dd>
         <dt>Message</dt>
         <dd><pre><?= $message ?></pre></dd>
         <dt>Response</dt>
-        <dd><?= $res_message ?></dd>
+        <dd><pre><?= var_dump($res) ?></pre></dd>
     </dl>
 <?php
 } else {
 ?>
-    <h2>Usage</h2>
-    <p><code><?= $_SERVER['REQUEST_URI']; ?>?room=[ROOM_ID]&key=[ACCESS_KEY]&token=[ACCESS_TOKEN]&message=[MESSAGE_TEXT]</code></p>
+    <form action="<?= $_SERVER['REQUEST_URI']; ?>">
+        <dl>
+            <dt>Webhook URL</dt>
+            <dd><input name="url" placeholder="https://" value="<?= $webhook_url ?>"></dd>
+            <dt>Message</dt>
+            <dd><textarea name="message" rows="20"><?= $message ?></textarea></dd>
+        </dl>
+        <div><input type="submit" value="POST"></div>
+    </form>
 <?php
 }
 ?>
