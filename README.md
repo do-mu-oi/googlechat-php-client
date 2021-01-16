@@ -1,4 +1,4 @@
-# Google Chat Endpoint
+# Google Chat PHP Client
 
 ## Usage
 

@@ -22,12 +22,12 @@ function post($url, $params) {
 ?>
 <html>
 <head>
-    <title>Google Chat Endpoint</title>
+    <title>Google Chat PHP Client</title>
     <link rel="stylesheet" href="normalize.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Google Chat Endpoint</h1>
+    <h1>Google Chat PHP Client</h1>
 <?php
 if (isset($_GET["room"]) && isset($_GET["key"]) && isset($_GET["token"])) {
     $url = sprintf(
