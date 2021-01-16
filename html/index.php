@@ -1,11 +1,6 @@
 <?php
-define("WEBHOOK_URL_FORMAT", "https://chat.googleapis.com/v1/spaces/%s/messages?key=%s&token=%s");
-
-$room_id = $_GET["room"];
-$access_key = $_GET["key"];
-$access_token = $_GET["token"];
+$webhook_url = $_GET["url"];
 $message = $_GET["message"];
-$confirm = $_GET["confirm"];
 
 function post($url, $params) {
     $curl = curl_init();
@@ -35,34 +30,25 @@ function post($url, $params) {
 <body>
     <h1>Google Chat PHP Client</h1>
 <?php
-if ($room_id && $access_key && $access_token && $message) {
-    $url = sprintf(
-        WEBHOOK_URL_FORMAT,
-        urlencode($room_id),
-        urlencode($access_key),
-        urlencode($access_token),
-    );
-
-    $res = post($url, [
+if ($webhook_url && $message) {
+    $res = post($webhook_url, [
         "text" => $message
     ]);
 
     if ($res->error) {
         $title = "[ERROR] Message sending error.";
-        $res_message = $res->error->message;
     } else {
         $title = "[OK] Message transmission completed.";
-        $res_message = $res->name;
     }
 ?>
     <h2><?= $title ?></h2>
     <dl>
         <dt>Webhook URL</dt>
-        <dd><code><?= $url ?></code></dd>
+        <dd><code><?= $webhook_url ?></code></dd>
         <dt>Message</dt>
         <dd><pre><?= $message ?></pre></dd>
         <dt>Response</dt>
-        <dd><?= $res_message ?></dd>
+        <dd><pre><?= var_dump($res) ?></pre></dd>
     </dl>
 <?php
 } else {
@@ -71,21 +57,9 @@ if ($room_id && $access_key && $access_token && $message) {
         <table>
             <tbody>
                 <tr>
-                    <th>room</th>
+                    <th>Webhook URL</th>
                     <td>
-                        <input name="room" placeholder="Room ID" value="<?= $room_id ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <th>key</th>
-                    <td>
-                        <input name="key" placeholder="Access key" value="<?= $access_key ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <th>token</th>
-                    <td>
-                        <input name="token" placeholder="Access token" value="<?= $access_token ?>">
+                        <input name="url" placeholder="https://" size="60" value="<?= $webhook_url ?>">
                     </td>
                 </tr>
                 <tr>
