@@ -1,6 +1,12 @@
 <?php
 define("WEBHOOK_URL_FORMAT", "https://chat.googleapis.com/v1/spaces/%s/messages?key=%s&token=%s");
 
+$room_id = $_GET["room"];
+$access_key = $_GET["key"];
+$access_token = $_GET["token"];
+$message = $_GET["message"];
+$confirm = $_GET["confirm"];
+
 function post($url, $params) {
     $curl = curl_init();
 
@@ -29,15 +35,13 @@ function post($url, $params) {
 <body>
     <h1>Google Chat PHP Client</h1>
 <?php
-if (isset($_GET["room"]) && isset($_GET["key"]) && isset($_GET["token"])) {
+if ($room_id && $access_key && $access_token && $message) {
     $url = sprintf(
         WEBHOOK_URL_FORMAT,
-        urlencode($_GET["room"]),
-        urlencode($_GET["key"]),
-        urlencode($_GET["token"]),
+        urlencode($room_id),
+        urlencode($access_key),
+        urlencode($access_token),
     );
-
-    $message = $_GET["message"];
 
     $res = post($url, [
         "text" => $message
@@ -69,25 +73,25 @@ if (isset($_GET["room"]) && isset($_GET["key"]) && isset($_GET["token"])) {
                 <tr>
                     <th>room</th>
                     <td>
-                        <input name="room" placeholder="Room ID">
+                        <input name="room" placeholder="Room ID" value="<?= $room_id ?>">
                     </td>
                 </tr>
                 <tr>
                     <th>key</th>
                     <td>
-                        <input name="key" placeholder="Access key">
+                        <input name="key" placeholder="Access key" value="<?= $access_key ?>">
                     </td>
                 </tr>
                 <tr>
                     <th>token</th>
                     <td>
-                        <input name="token" placeholder="Access token">
+                        <input name="token" placeholder="Access token" value="<?= $access_token ?>">
                     </td>
                 </tr>
                 <tr>
                     <th>message</th>
                     <td>
-                        <textarea name="message" cols="80" rows="20"></textarea>
+                        <textarea name="message" cols="80" rows="20"><?= $message ?></textarea>
                     </td>
                 </tr>
             </tbody>
