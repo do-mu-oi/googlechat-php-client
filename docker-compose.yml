@@ -5,4 +5,4 @@ services:
     volumes:
       - ./html:/var/www/html
     ports:
-      - "7777:80"
+      - $PORT:80
