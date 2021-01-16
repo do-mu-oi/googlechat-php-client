@@ -63,8 +63,37 @@ if (isset($_GET["room"]) && isset($_GET["key"]) && isset($_GET["token"])) {
 <?php
 } else {
 ?>
-    <h2>Usage</h2>
-    <p><code><?= $_SERVER['REQUEST_URI']; ?>?room=[ROOM_ID]&key=[ACCESS_KEY]&token=[ACCESS_TOKEN]&message=[MESSAGE_TEXT]</code></p>
+    <form action="<?= $_SERVER['REQUEST_URI']; ?>">
+        <table>
+            <tbody>
+                <tr>
+                    <th>room</th>
+                    <td>
+                        <input name="room" placeholder="Room ID">
+                    </td>
+                </tr>
+                <tr>
+                    <th>key</th>
+                    <td>
+                        <input name="key" placeholder="Access key">
+                    </td>
+                </tr>
+                <tr>
+                    <th>token</th>
+                    <td>
+                        <input name="token" placeholder="Access token">
+                    </td>
+                </tr>
+                <tr>
+                    <th>message</th>
+                    <td>
+                        <textarea name="message" cols="80" rows="20"></textarea>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div><input type="submit"></div>
+    </form>
 <?php
 }
 ?>
