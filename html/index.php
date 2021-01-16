@@ -37,11 +37,13 @@ if ($webhook_url && $message) {
 
     if ($res->error) {
         $title = "[ERROR] Message sending error.";
+        $class_name = "error";
     } else {
         $title = "[OK] Message transmission completed.";
+        $class_name = "success";
     }
 ?>
-    <h2><?= $title ?></h2>
+    <h2 class="<?= $class_name ?>"><?= $title ?></h2>
     <dl>
         <dt>Webhook URL</dt>
         <dd><code><?= $webhook_url ?></code></dd>
@@ -54,23 +56,13 @@ if ($webhook_url && $message) {
 } else {
 ?>
     <form action="<?= $_SERVER['REQUEST_URI']; ?>">
-        <table>
-            <tbody>
-                <tr>
-                    <th>Webhook URL</th>
-                    <td>
-                        <input name="url" placeholder="https://" size="60" value="<?= $webhook_url ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <th>message</th>
-                    <td>
-                        <textarea name="message" cols="80" rows="20"><?= $message ?></textarea>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div><input type="submit"></div>
+        <dl>
+            <dt>Webhook URL</dt>
+            <dd><input name="url" placeholder="https://" value="<?= $webhook_url ?>"></dd>
+            <dt>Message</dt>
+            <dd><textarea name="message" rows="20"><?= $message ?></textarea></dd>
+        </dl>
+        <div><input type="submit" value="POST"></div>
     </form>
 <?php
 }
